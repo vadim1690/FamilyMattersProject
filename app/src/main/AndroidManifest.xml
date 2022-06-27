@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.familymattersproject">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.familymattersproject">
 
     <application
         android:allowBackup="true"
@@ -10,8 +9,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FamilyMattersProject">
         <activity
-            android:name=".activities.Activity_Notifications"
+            android:name=".activities.Activity_MyFamily"
             android:exported="false" />
+        <activity
+            android:name=".activities.Activity_ToDoListArchived"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Activity_AddTodoTask"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Activity_AddFamilyEvent"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Activity_CreateUser"
+            android:exported="false" >
+
+        </activity>
         <activity
             android:name=".activities.Activity_ToDoList"
             android:exported="false" />
@@ -32,9 +45,6 @@
             android:exported="false" />
         <activity
             android:name=".activities.Activity_Login"
-            android:exported="false" />
-        <activity
-            android:name=".activities.Activity_SignUp"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

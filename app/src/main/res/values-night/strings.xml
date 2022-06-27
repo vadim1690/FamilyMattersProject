@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_in_cancelled">The sign-in operation cancelled</string>
+    <string name="no_internet_connection">No Internet connection</string>
+    <string name="unknown_error">Unknown Error occurred</string>
+    <string name="use_to_add_events">Use \'+\' to add family events</string>
+    <string name="todoTaskNotSaved">New Todo task did not saved!</string>
+    <string name="fillAllFieldsAlert">Please fill all the fields…</string>
+    <string name="invalidFirstNameAlert">Please enter valid first name</string>
+    <string name="family_name_not_saved">Family Name did not saved!</string>
+    <string name="family_id_not_saved">Family Id did not saved!</string>
+    <string name="event_not_saved">New Event did not saved!</string>
+    <string name="enter_event_description">Enter Event description</string>
+    <string name="save">Save</string>
+    <string name="enter_task_description">Enter task description</string>
+    <string name="add_task_to_the_family_to_do_list">Add Task to the Family To-do list</string>
+    <string name="to_continue_enter_your_family_name">To continue enter your Family name</string>
+    <string name="enter_family_name">Enter Family name</string>
+    <string name="create">Create</string>
+    <string name="welcome_aboard_n_please_enter_your_first_name_and_choose_your_action">Welcome aboard\n please enter your first name and general information and then choose your action</string>
+    <string name="enter_first_name">Enter first name</string>
+    <string name="join_family">Join Family</string>
+    <string name="create_family">Create Family</string>
+    <string name="home">HOME</string>
+    <string name="events">EVENTS</string>
+    <string name="todo">TODO</string>
+    <string name="to_continue_enter_the_family_id">To continue enter the Family ID</string>
+    <string name="join">Join</string>
+    <string name="enter_family_id">Enter Family ID</string>
+    <string name="just_a_moment">Just a moment...</string>
+    <string name="latest_family_updates">Latest Family updates:</string>
+    <string name="my_family">My Family</string>
+    <string name="my_profile">My profile</string>
+    <string name="sign_out">Sign out</string>
+    <string name="personal_information">Personal information</string>
+    <string name="archive">ARCHIVE</string>
+    <string name="family_to_do_list">Family To-do List</string>
+    <string name="back">BACK</string>
+    <string name="archived_to_do_list">Archived To-do List</string>
+    <string name="enter_valid_family_name">Please enter valid Family name</string>
+    <string name="enter_valid_family_id">Please Enter valid family ID</string>
+</resources>

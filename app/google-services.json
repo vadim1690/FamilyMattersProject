@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "642280782396",
+    "project_id": "family-matters-b5472",
+    "storage_bucket": "family-matters-b5472.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642280782396:android:3af1d09572a3aa6ab8e139",
+        "android_client_info": {
+          "package_name": "com.example.familymattersproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "642280782396-n5j3rmvssq41jhdae4740373as0namek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5fm8pM-dcPA0lpKRk0yMJL_i9mrbAUjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "642280782396-n5j3rmvssq41jhdae4740373as0namek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
