@@ -45,6 +45,7 @@ public class DataManager {
     private ValueEventListener updatesValueEventListener;
     private ValueEventListener familyEventsValueEventListener;
     private ValueEventListener todoListValueEventListener;
+    private ValueEventListener signedInUserValueEventListener;
 
     private DataManager() {
         database = FirebaseDatabase.getInstance();
@@ -63,8 +64,8 @@ public class DataManager {
 
     public void handleSignedInUser(Callback_handleSignedInUser callback_handleSignedInUser) {
         DatabaseReference usersReference = database.getReference(USERS_DB_KEY).child(firebaseUser.getUid());
-        // Read from the database
-        usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        signedInUserValueEventListener  = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -81,11 +82,14 @@ public class DataManager {
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d(TAG, "Failed to read value.", error.toException());
             }
-        });
+        };
+
+        // Read from the database
+        usersReference.addValueEventListener(signedInUserValueEventListener);
     }
 
     private void handleSignedInUserFamily(Callback_handleSignedInUser callback_handleSignedInUser) {
-        DatabaseReference familyReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(userEntity.getFamilyUID());
+        DatabaseReference familyReference = database.getReference(FAMILIES_DB_KEY).child(userEntity.getFamilyUID());
         familyReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -125,7 +129,7 @@ public class DataManager {
     }
 
     public void readFamilyEntity() {
-        DatabaseReference familyReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(userEntity.getFamilyUID());
+        DatabaseReference familyReference = database.getReference(FAMILIES_DB_KEY).child(userEntity.getFamilyUID());
         familyReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -141,7 +145,7 @@ public class DataManager {
     }
 
     private void setUserAvatar(UserEntity userEntity) {
-        DatabaseReference avatarsReference = FirebaseDatabase.getInstance().getReference(AVATARS_DB_KEY);
+        DatabaseReference avatarsReference = database.getReference(AVATARS_DB_KEY);
 
         avatarsReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -160,7 +164,7 @@ public class DataManager {
     }
 
     public void getUpdatesList(Callback_setFamilyUpdates callback_setFamilyUpdates) {
-        DatabaseReference updatesReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
+        DatabaseReference updatesReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
         updatesValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -184,7 +188,7 @@ public class DataManager {
     }
 
     public void getFamilyEvents(Callback_setFamilyEvents callback_setFamilyEvents) {
-        DatabaseReference eventsReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY);
+        DatabaseReference eventsReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY);
         familyEventsValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -211,7 +215,7 @@ public class DataManager {
     }
 
     private void getUserForFamilyMember(String userId, Callback_setFamilyMember callback_setFamilyMember) {
-        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference(USERS_DB_KEY).child(userId);
+        DatabaseReference userReference = database.getReference(USERS_DB_KEY).child(userId);
 
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -233,9 +237,9 @@ public class DataManager {
     public void getFamilyTodoList(Callback_setFamilyTodoList callback_setFamilyTodoList, boolean isArchived) {
         DatabaseReference todoListReference;
         if (isArchived)
-            todoListReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_ARCHIVED_DB_KEY);
+            todoListReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_ARCHIVED_DB_KEY);
         else
-            todoListReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY);
+            todoListReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY);
 
         todoListValueEventListener = new ValueEventListener() {
             @Override
@@ -266,7 +270,7 @@ public class DataManager {
     /* --------------------WRITE-------------------------------------------------------------------------------------------------------*/
 
     public void createNewFamily(String familyName) {
-        DatabaseReference familiesReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY);
+        DatabaseReference familiesReference = database.getReference(FAMILIES_DB_KEY);
         familyEntity = new FamilyEntity();
         familyEntity.setName(familyName);
         familyEntity.setCreator(firebaseUser.getUid());
@@ -291,13 +295,13 @@ public class DataManager {
 
 
     private void saveUserEntityInDatabase(UserEntity userEntity) {
-        DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference(USERS_DB_KEY);
+        DatabaseReference usersReference = database.getReference(USERS_DB_KEY);
         usersReference.child(userEntity.getUID()).setValue(userEntity);
     }
 
     public void addFamilyEvent(FamilyEventEntity familyEventEntity) {
-        DatabaseReference eventsReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY);
-        DatabaseReference updatesReference = FirebaseDatabase.getInstance().getReference("Families").child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
+        DatabaseReference eventsReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY);
+        DatabaseReference updatesReference = database.getReference("Families").child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
 
 
         String text = userEntity.getName() + " created new event";
@@ -308,7 +312,7 @@ public class DataManager {
     }
 
     public void deleteFamilyEvent(FamilyEventEntity familyEventEntity) {
-        DatabaseReference eventsReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY);
+        DatabaseReference eventsReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY);
         eventsReference.child(familyEventEntity.getUID()).removeValue();
     }
 
@@ -321,14 +325,14 @@ public class DataManager {
     }
 
     private void addUserToFamilyInDatabase(String familyUid) {
-        DatabaseReference familyReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyUid);
+        DatabaseReference familyReference = database.getReference(FAMILIES_DB_KEY).child(familyUid);
         familyReference.child(FAMILY_MEMBERS_DB_KEY).child(userEntity.getUID()).setValue(true);
     }
 
     public void todoTaskChecked(TodoTaskEntity todoTaskEntity) {
-        DatabaseReference todoListArchivedReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_ARCHIVED_DB_KEY);
-        DatabaseReference todoListReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY);
-        DatabaseReference updatesReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
+        DatabaseReference todoListArchivedReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_ARCHIVED_DB_KEY);
+        DatabaseReference todoListReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY);
+        DatabaseReference updatesReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
 
         String text = userEntity.getName() + " Checked " + "'" + todoTaskEntity.getDescription() + "' as done";
         UpdateEntity updateEntity = new UpdateEntity(text, userEntity.getName(), new Date());
@@ -339,8 +343,8 @@ public class DataManager {
     }
 
     public void addFamilyTodoTask(TodoTaskEntity todoTaskEntity) {
-        DatabaseReference todoListReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY);
-        DatabaseReference updatesReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
+        DatabaseReference todoListReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY);
+        DatabaseReference updatesReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
         todoTaskEntity.setCreatedByIconPath(userEntity.getAvatar());
         todoListReference.child(todoTaskEntity.getUID()).setValue(todoTaskEntity);
 
@@ -351,8 +355,8 @@ public class DataManager {
     }
 
     public void todoTaskUnchecked(TodoTaskEntity todoTaskEntity) {
-        DatabaseReference todoListArchivedReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_ARCHIVED_DB_KEY);
-        DatabaseReference todoListReference = FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY);
+        DatabaseReference todoListArchivedReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_ARCHIVED_DB_KEY);
+        DatabaseReference todoListReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY);
         todoListReference.child(todoTaskEntity.getUID()).setValue(todoTaskEntity);
         todoListArchivedReference.child(todoTaskEntity.getUID()).removeValue();
     }
@@ -378,13 +382,15 @@ public class DataManager {
     }
 
     public void removeAllEventListeners() {
+        if(signedInUserValueEventListener != null)
+            database.getReference(USERS_DB_KEY).child(firebaseUser.getUid());
         if (updatesValueEventListener != null)
-            FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY).removeEventListener(updatesValueEventListener);
+            database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY).removeEventListener(updatesValueEventListener);
         if (familyEventsValueEventListener != null)
-            FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY).removeEventListener(familyEventsValueEventListener);
+            database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY).removeEventListener(familyEventsValueEventListener);
         if (todoListValueEventListener != null) {
-            FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_ARCHIVED_DB_KEY).removeEventListener(todoListValueEventListener);
-            FirebaseDatabase.getInstance().getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY).removeEventListener(todoListValueEventListener);
+            database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_ARCHIVED_DB_KEY).removeEventListener(todoListValueEventListener);
+            database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_TODOLIST_DB_KEY).removeEventListener(todoListValueEventListener);
         }
     }
 

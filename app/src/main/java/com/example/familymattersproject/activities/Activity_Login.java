@@ -60,10 +60,13 @@ public class Activity_Login extends AppCompatActivity {
     private List<AuthUI.IdpConfig> getSelectedProviders() {
 
         return Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build());
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.PhoneBuilder().build()
+                );
     }
 
     private void startMainActivity() {
+        DataManager.getInstance().removeAllEventListeners();
         DataManager.getInstance().readUserEntity();
         DataManager.getInstance().readFamilyEntity();
         Intent intent = new Intent(getApplicationContext(), Activity_MainPage.class);
@@ -75,7 +78,6 @@ public class Activity_Login extends AppCompatActivity {
     private void startCreateUserActivity() {
         Intent intent = new Intent(getApplicationContext(), Activity_CreateUser.class);
         startActivity(intent);
-        finish();
     }
 
     private void launchSignInActivity() {

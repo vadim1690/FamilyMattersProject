@@ -98,7 +98,7 @@ public class Activity_CreateUser extends AppCompatActivity {
     private void joinFamily(String familyUid) {
         DataManager.getInstance().createNewJoiningUser(createUser_EDT_information.getText().toString(),createUser_EDT_name.getText().toString(), familyUid);
         DataManager.getInstance().addUserToFamily(familyUid);
-        startLogin();
+        finish();
     }
 
     private void createFamily(String familyName) {
@@ -106,15 +106,9 @@ public class Activity_CreateUser extends AppCompatActivity {
         DataManager.getInstance().createNewFamily(familyName);
         DataManager.getInstance().createNewUser(createUser_EDT_information.getText().toString(),createUser_EDT_name.getText().toString());
         DataManager.getInstance().addUserToFamily();
-        startLogin();
-    }
-
-
-    private void startLogin() {
-        Intent intent = new Intent(getApplicationContext(), Activity_Login.class);
-        startActivity(intent);
         finish();
     }
+
 
 
 }
