@@ -1,7 +1,6 @@
 package com.example.familymattersproject.data;
 
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -10,7 +9,6 @@ import com.example.familymattersproject.entities.FamilyEventEntity;
 import com.example.familymattersproject.entities.TodoTaskEntity;
 import com.example.familymattersproject.entities.UpdateEntity;
 import com.example.familymattersproject.entities.UserEntity;
-import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -301,7 +300,7 @@ public class DataManager {
 
     public void addFamilyEvent(FamilyEventEntity familyEventEntity) {
         DatabaseReference eventsReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_EVENTS_DB_KEY);
-        DatabaseReference updatesReference = database.getReference("Families").child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
+        DatabaseReference updatesReference = database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY);
 
 
         String text = userEntity.getName() + " created new event";
@@ -383,7 +382,7 @@ public class DataManager {
 
     public void removeAllEventListeners() {
         if(signedInUserValueEventListener != null)
-            database.getReference(USERS_DB_KEY).child(firebaseUser.getUid());
+            database.getReference(USERS_DB_KEY).child(firebaseUser.getUid()).removeEventListener(signedInUserValueEventListener);
         if (updatesValueEventListener != null)
             database.getReference(FAMILIES_DB_KEY).child(familyEntity.getUID()).child(FAMILY_UPDATES_DB_KEY).removeEventListener(updatesValueEventListener);
         if (familyEventsValueEventListener != null)
